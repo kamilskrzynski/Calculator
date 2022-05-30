@@ -57,9 +57,16 @@ enum CalculatorButton: String {
     }
 }
 
+enum CalculatorOperation {
+    case add, substract, multiply, divide
+}
+
 struct ContentView: View {
     
-    @State private var currentValue: String = "81"
+    @State private var currentValue: String = "0"
+    @State private var placeholder: String = "0"
+    @State private var result: String = ""
+    @State private var currentOperation: CalculatorOperation? = nil
     
     let buttons: [[CalculatorButton]] = [
         [.clear, .negative, .percentage, .divide],
@@ -87,6 +94,7 @@ struct ContentView: View {
                     HStack {
                         ForEach(row, id: \.self) { button in
                             Button {
+                                buttonTapped(button: button)
                             } label: {
                                 Text(button.rawValue)
                                     .foregroundColor(.white)
@@ -100,6 +108,58 @@ struct ContentView: View {
                 }
             }
             .padding(.bottom)
+        }
+    }
+    
+    func buttonTapped(button: CalculatorButton) {
+        switch button {
+        case .clear:
+            currentValue = "0"
+        case .one, .two, .three, .four, .five, .six, .seven, .eight, .nine:
+            if currentValue == "0" {
+                currentValue = button.rawValue
+            } else {
+                currentValue = currentValue + button.rawValue
+            }
+        case .add, .substract, .multiply, .divide:
+            if button == .add {
+                currentOperation = .add
+                placeholder = currentValue
+                currentValue = "0"
+            } else if button == .substract {
+                currentOperation = .substract
+                placeholder = currentValue
+                currentValue = "0"
+            } else if button == .multiply {
+                currentOperation = .multiply
+                placeholder = currentValue
+                currentValue = "0"
+            } else if button == .divide {
+                currentOperation = .divide
+                placeholder = currentValue
+                currentValue = "0"
+            } else {
+                currentOperation = nil
+            }
+        case .equal:
+            switch currentOperation {
+            case .add:
+                result = String((Int(placeholder) ?? 0) + (Int(currentValue) ?? 0))
+                currentValue = result
+            case .substract:
+                result = String((Int(placeholder) ?? 0) - (Int(currentValue) ?? 0))
+                currentValue = result
+            case .multiply:
+                result = String((Int(placeholder) ?? 0) * (Int(currentValue) ?? 0))
+                currentValue = result
+            case .divide:
+                result = String((Int(placeholder) ?? 0) / (Int(currentValue) ?? 0))
+                currentValue = result
+            case .none:
+                break
+            }
+        default:
+            break
         }
     }
 }
