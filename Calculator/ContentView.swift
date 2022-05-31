@@ -177,7 +177,8 @@ struct ContentView: View {
                 currentValue = "-\(currentValue)"
             }
         case .percentage:
-            result = String(Double(result) ?? 0 * 100) + "%"
+            let newResult = String((Double(result) ?? 0) * 100) + "%"
+            currentValue = newResult
         default:
             break
         }
