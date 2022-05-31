@@ -144,20 +144,40 @@ struct ContentView: View {
         case .equal:
             switch currentOperation {
             case .add:
-                result = String((Int(placeholder) ?? 0) + (Int(currentValue) ?? 0))
+                result = String((Double(placeholder) ?? 0) + (Double(currentValue) ?? 0))
+                if result.hasSuffix(".0") {
+                    result.removeLast(2)
+                }
                 currentValue = result
             case .substract:
-                result = String((Int(placeholder) ?? 0) - (Int(currentValue) ?? 0))
+                result = String((Double(placeholder) ?? 0) - (Double(currentValue) ?? 0))
+                if result.hasSuffix(".0") {
+                    result.removeLast(2)
+                }
                 currentValue = result
             case .multiply:
-                result = String((Int(placeholder) ?? 0) * (Int(currentValue) ?? 0))
+                result = String((Double(placeholder) ?? 0) * (Double(currentValue) ?? 0))
+                if result.hasSuffix(".0") {
+                    result.removeLast(2)
+                }
                 currentValue = result
             case .divide:
-                result = String((Int(placeholder) ?? 0) / (Int(currentValue) ?? 0))
+                result = String((Double(placeholder) ?? 0) / (Double(currentValue) ?? 0))
+                if result.hasSuffix(".0") {
+                    result.removeLast(2)
+                }
                 currentValue = result
             case .none:
                 break
             }
+        case .negative:
+            if currentValue.starts(with: "-") {
+                currentValue.removeFirst()
+            } else {
+                currentValue = "-\(currentValue)"
+            }
+        case .percentage:
+            result = String(Double(result) ?? 0 * 100) + "%"
         default:
             break
         }
