@@ -28,6 +28,13 @@ enum CalculatorButton: String {
     case one = "1"
     case zero = "0"
     
+    var foregroundColor: Color {
+        switch self {
+        default:
+            return Color.white
+        }
+    }
+    
     var backgroundColor: Color {
         switch self {
         case .equal, .add, .substract, .multiply, .divide:
@@ -67,6 +74,7 @@ struct ContentView: View {
     @State private var placeholder: String = "0"
     @State private var result: String = ""
     @State private var currentOperation: CalculatorOperation? = nil
+    @State private var isButtonClicked: Bool = false
     
     let buttons: [[CalculatorButton]] = [
         [.clear, .negative, .percentage, .divide],
@@ -97,7 +105,7 @@ struct ContentView: View {
                                 buttonTapped(button: button)
                             } label: {
                                 Text(button.rawValue)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(button.foregroundColor)
                                     .font(.system(size: 30, weight: .semibold))
                                     .frame(width: button.width, height: button.height)
                                     .background(button.backgroundColor)
