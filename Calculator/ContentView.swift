@@ -28,6 +28,14 @@ enum CalculatorButton: String {
     case one = "1"
     case zero = "0"
     
+    var isZeroButton: Bool {
+        if width > height {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     var foregroundColor: Color {
         switch self {
         default:
@@ -49,7 +57,7 @@ enum CalculatorButton: String {
     var width: CGFloat {
         switch self {
         case .zero:
-            return (self.getButtonWidth() * 2) + 12
+            return (self.getButtonWidth() * 2) + 8
         default:
             return self.getButtonWidth()
         }
@@ -104,12 +112,19 @@ struct ContentView: View {
                             Button {
                                 buttonTapped(button: button)
                             } label: {
-                                Text(button.rawValue)
-                                    .foregroundColor(button.foregroundColor)
-                                    .font(.system(size: 30, weight: .semibold))
-                                    .frame(width: button.width, height: button.height)
-                                    .background(button.backgroundColor)
-                                    .cornerRadius(button.height)
+                                HStack {
+                                    Text(button.rawValue)
+                                        .foregroundColor(button.foregroundColor)
+                                        .font(.system(size: 30, weight: .semibold))
+                                        .frame(width: button.getButtonWidth(), height: button.getButtonWidth())
+                                    
+                                    if(button.isZeroButton) {
+                                        Spacer()
+                                    }
+                                }
+                                .frame(width: button.width, height: button.height)
+                                .background(button.backgroundColor)
+                                .cornerRadius(button.height)
                             }
                         }
                     }
